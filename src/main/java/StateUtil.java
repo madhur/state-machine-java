@@ -12,15 +12,14 @@ public class StateUtil {
    * @param statesList List of states
    * @param textLines Input string
    * @throws StateException stateexception
-   * @throws StateNotFoundException statenotfoundexception
    */
   public static void markTerimalStates(ArrayList<State> statesList, ArrayList<String> textLines)
-          throws StateException, StateNotFoundException {
+          throws StateException {
     for (String terminalState : textLines) {
 
       State targetState = containsState(statesList, terminalState);
       if (targetState == null) {
-        throw new StateNotFoundException();
+        throw new StateException("The state was not found");
       }
 
       if (targetState.isInitial()) {
@@ -36,15 +35,14 @@ public class StateUtil {
    * Mark initial state.
    * @param statesList list of states
    * @param initialState initial state string
-   * @throws StateNotFoundException statenotfoundexception
    * @throws StateException stateexception
    */
   public static void markInitialState(ArrayList<State> statesList, String initialState) throws
-          StateNotFoundException, StateException {
+          StateException {
     State targetState  = containsState(statesList, initialState);
 
     if (targetState == null) {
-      throw new StateNotFoundException();
+      throw new StateException("The state was not found");
     }
 
     targetState.setInitial(true);
@@ -148,7 +146,7 @@ public class StateUtil {
    */
   public static void readTransitions(ArrayList<State> statesList, ArrayList<Event> eventList)
           throws StateException {
-    
+
     Scanner sc = new Scanner(System.in);
     String line;
     while (!(line = sc.nextLine()).equals("")) {
