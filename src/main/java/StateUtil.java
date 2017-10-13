@@ -22,11 +22,11 @@ public class StateUtil {
         throw new StateException("The state was not found");
       }
 
-      if (targetState.isInitial()) {
+      if (targetState.getStateType() == StateType.INITIAL) {
         throw new StateException("State cannot be both initial and terminal");
       }
 
-      targetState.setTerminal(true);
+      targetState.setStateType(StateType.TERMINAL);
 
     }
   }
@@ -45,7 +45,7 @@ public class StateUtil {
       throw new StateException("The state was not found");
     }
 
-    targetState.setInitial(true);
+    targetState.setStateType(StateType.INITIAL);
   }
 
   /**
@@ -194,7 +194,7 @@ public class StateUtil {
         }
 
         currentState = currentState.transition(event);
-        if (currentState.isTerminal()) {
+        if (currentState.getStateType() == StateType.TERMINAL) {
           System.out.println("<! " + currentState.getState());
           break;
         }
@@ -209,7 +209,7 @@ public class StateUtil {
 
   private static State getInitialState(ArrayList<State> statesList) throws StateException {
     for (State state: statesList) {
-      if (state.isInitial()) {
+      if (state.getStateType() == StateType.INITIAL) {
         return state;
       }
     }

@@ -8,9 +8,15 @@ public class State {
 
   private String state;
 
-  private boolean isTerminal;
+  public StateType getStateType() {
+    return stateType;
+  }
 
-  private boolean isInitial;
+  public void setStateType(StateType stateType) {
+    this.stateType = stateType;
+  }
+
+  private StateType stateType;
 
   private Map<Event, State> transitions = new HashMap<Event, State>();
 
@@ -23,20 +29,17 @@ public class State {
   public State(String state) {
 
     this.state = state;
-    this.isTerminal = false;
-    this.isInitial = false;
+    this.stateType = StateType.INTERMEDIATE;
   }
 
   /**
    * Constructor for the unit test.
    * @param state state
-   * @param isTerminal if its a final state
-   * @param isInitial if its a initial state
+   *
    */
-  public State(String state, boolean isTerminal, boolean isInitial) {
+  public State(String state, StateType stateType) {
     this.state = state;
-    this.isTerminal = isTerminal;
-    this.isInitial = isInitial;
+    this.stateType = stateType;
   }
 
   public String getState() {
@@ -45,22 +48,6 @@ public class State {
 
   public void setState(String state) {
     this.state = state;
-  }
-
-  public boolean isTerminal() {
-    return isTerminal;
-  }
-
-  public void setTerminal(boolean terminal) {
-    isTerminal = terminal;
-  }
-
-  public boolean isInitial() {
-    return isInitial;
-  }
-
-  public void setInitial(boolean initial) {
-    isInitial = initial;
   }
 
   @Override

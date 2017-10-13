@@ -13,13 +13,13 @@ public class FunctionalTests {
   static ArrayList<State> states = new ArrayList<State>();
   static ArrayList<Event> events = new ArrayList<Event>();
 
-  static State zeroState = new State("0S", false, true);
-  static State firstState = new State("1S", false, false);
-  static State secondState = new State("2S", false, false);
-  static State thirdState = new State("3S", false, false);
-  static State fourthState = new State("4S", false, false);
-  static State cancelState = new State("CANCELLED", true , false);
-  static State completedState = new State("COMPLETED", true, false);
+  static State zeroState = new State("0S", StateType.INITIAL);
+  static State firstState = new State("1S");
+  static State secondState = new State("2S");
+  static State thirdState = new State("3S");
+  static State fourthState = new State("4S");
+  static State cancelState = new State("CANCELLED", StateType.TERMINAL);
+  static State completedState = new State("COMPLETED", StateType.TERMINAL);
 
   static Event firstEvent = new Event("1R");
   static Event secondEvent = new Event("2R");
