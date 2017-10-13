@@ -6,6 +6,10 @@ import java.util.ArrayList;
  */
 public class Fsm {
 
+  /**
+   * Entry point of the program.
+   * @param args Any command line arguments
+   */
   public static void main(String[] args) {
     try {
 
@@ -14,29 +18,28 @@ public class Fsm {
       ArrayList<State> statesList = StateUtil.getStates(textLines);
 
 
-      boolean enteredInitialState = false, enteredFinalState = false;
+      boolean enteredInitialState = false;
+      boolean enteredFinalState = false;
 
-      while(!enteredInitialState) {
-      try {
-        System.out.println("Enter the initial state: ");
-        String initialState = StateUtil.readSingleText();
+      while (!enteredInitialState) {
+        try {
+          System.out.println("Enter the initial state: ");
+          String initialState = StateUtil.readSingleText();
 
-        StateUtil.markInitialState(statesList, initialState);
-        enteredInitialState = true;
-      }
-      catch(Exception ex) {
-        System.out.println(ex.getMessage());
-      }
+          StateUtil.markInitialState(statesList, initialState);
+          enteredInitialState = true;
+        } catch (Exception ex) {
+          System.out.println(ex.getMessage());
+        }
       }
 
-      while(!enteredFinalState) {
+      while (!enteredFinalState) {
         try {
           System.out.println("Enter the terminal states (Newline to stop): ");
           textLines = StateUtil.readText();
           StateUtil.markTerimalStates(statesList, textLines);
           enteredFinalState = true;
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
           System.out.println(ex.getMessage());
         }
       }
@@ -50,8 +53,7 @@ public class Fsm {
 
       StateUtil.handleTransitions(statesList, events);
 
-    }
-    catch(Exception ex) {
+    } catch (Exception ex) {
       System.out.println(ex.getMessage());
       System.exit(1);
     }

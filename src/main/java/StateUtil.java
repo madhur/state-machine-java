@@ -7,7 +7,15 @@ import java.util.Scanner;
  */
 public class StateUtil {
 
-  public static void markTerimalStates(ArrayList<State> statesList, ArrayList<String> textLines) throws StateException, StateNotFoundException {
+  /**
+   * Marks terminal states.
+   * @param statesList List of states
+   * @param textLines Input string
+   * @throws StateException stateexception
+   * @throws StateNotFoundException statenotfoundexception
+   */
+  public static void markTerimalStates(ArrayList<State> statesList, ArrayList<String> textLines)
+          throws StateException, StateNotFoundException {
     for (String terminalState : textLines) {
 
       State targetState = containsState(statesList, terminalState);
@@ -24,19 +32,32 @@ public class StateUtil {
     }
   }
 
-  public static void markInitialState(ArrayList<State> statesList, String initialState) throws StateNotFoundException, StateException {
+  /**
+   * Mark initial state.
+   * @param statesList list of states
+   * @param initialState initial state string
+   * @throws StateNotFoundException statenotfoundexception
+   * @throws StateException stateexception
+   */
+  public static void markInitialState(ArrayList<State> statesList, String initialState) throws
+          StateNotFoundException, StateException {
     State targetState  = containsState(statesList, initialState);
 
-    if(targetState == null) {
+    if (targetState == null) {
       throw new StateNotFoundException();
     }
 
     targetState.setInitial(true);
   }
 
+  /**
+   * Get states list from list of strings.
+   * @param stringStates list of strings
+   * @return ArrayList of states
+   */
   public static ArrayList<State> getStates(ArrayList<String> stringStates) {
     ArrayList<State> states = new ArrayList<State>();
-    for(String state: stringStates) {
+    for (String state: stringStates) {
       states.add(new State(state));
     }
 
@@ -44,9 +65,14 @@ public class StateUtil {
 
   }
 
+  /**
+   * get list of events from list of strings.
+   * @param stringEvents List of string events
+   * @return ArrayList of events.
+   */
   public static ArrayList<Event> getEvents(ArrayList<String> stringEvents) {
     ArrayList<Event> eventList = new ArrayList<Event>();
-    for(String event: stringEvents) {
+    for (String event: stringEvents) {
       eventList.add(new Event(event));
     }
 
@@ -54,6 +80,13 @@ public class StateUtil {
 
   }
 
+  /**
+   * Checks if the list of states contains the state string.
+   * @param list list of states
+   * @param state single state string
+   * @return State object
+   * @throws StateException state exception
+   */
   public static State containsState(List<State> list, String state) throws StateException {
     for (State object : list) {
       if (object.getState().equalsIgnoreCase(state)) {
@@ -64,6 +97,13 @@ public class StateUtil {
     throw new StateException("State not found: " + state);
   }
 
+  /**
+   * Checks if the list of events contains a particular event.
+   * @param list list of events
+   * @param event string event
+   * @return Event object
+   * @throws StateException stateexception
+   */
   public static Event containsEvent(List<Event> list, String event) throws StateException {
     for (Event object : list) {
       if (object.getEvent().equalsIgnoreCase(event)) {
@@ -75,29 +115,43 @@ public class StateUtil {
   }
 
 
+  /**
+   * Reads multiple lines of text from console.
+   * @return ArrayList of strings
+   */
   public static ArrayList<String> readText() {
     ArrayList<String> lines = new ArrayList<String>();
     Scanner sc = new Scanner(System.in);
     String line;
-    while (!(line = sc.nextLine()).equals("")){
+    while (!(line = sc.nextLine()).equals("")) {
       lines.add(line);
     }
 
     return lines;
   }
 
+  /**
+   * Read single line of text from console.
+   * @return String object
+   */
   public static String readSingleText() {
     Scanner sc = new Scanner(System.in);
     String text = sc.nextLine();
     return text;
   }
 
-  public static void readTransitions(ArrayList<State> statesList, ArrayList<Event> eventList) throws StateException {
-
-    ArrayList<String> lines = new ArrayList<String>();
+  /**
+   * ReadTranstions from the consoles.
+   * @param statesList list of states
+   * @param eventList list of events
+   * @throws StateException state exception.
+   */
+  public static void readTransitions(ArrayList<State> statesList, ArrayList<Event> eventList)
+          throws StateException {
+    
     Scanner sc = new Scanner(System.in);
     String line;
-    while (!(line = sc.nextLine()).equals("")){
+    while (!(line = sc.nextLine()).equals("")) {
       try {
         String[] parts = line.split(",");
         if (parts.length < 3) {
@@ -109,8 +163,7 @@ public class StateUtil {
         Event event = containsEvent(eventList, parts[1]);
 
         initialState.addTransition(event, finalState);
-      }
-      catch (Exception ex) {
+      } catch (Exception ex) {
         System.out.println(ex.getMessage());
       }
 
@@ -118,7 +171,14 @@ public class StateUtil {
 
   }
 
-  public static void handleTransitions(ArrayList<State> statesList, ArrayList<Event> events) throws StateException {
+  /**
+   * Handles the transition loop from the console.
+   * @param statesList list of states
+   * @param events list of events
+   * @throws StateException state exception
+   */
+  public static void handleTransitions(ArrayList<State> statesList, ArrayList<Event> events)
+          throws StateException {
 
     State currentState = getInitialState(statesList);
     System.out.println("The initial state is: ");
@@ -126,7 +186,7 @@ public class StateUtil {
     String input;
     Scanner sc = new Scanner(System.in);
 
-    while(true) {
+    while (true) {
       try {
         System.out.print("> ");
         input = sc.nextLine();
@@ -136,25 +196,22 @@ public class StateUtil {
         }
 
         currentState = currentState.transition(event);
-        if(currentState.isTerminal()) {
+        if (currentState.isTerminal()) {
           System.out.println("<! " + currentState.getState());
           break;
         }
         System.out.println("< " + currentState.getState());
-      }
-      catch (Exception ex) {
+      } catch (Exception ex) {
         System.out.println(ex.getMessage());
       }
 
     }
 
-
-
   }
 
   private static State getInitialState(ArrayList<State> statesList) throws StateException {
-    for(State state: statesList) {
-      if(state.isInitial()) {
+    for (State state: statesList) {
+      if (state.isInitial()) {
         return state;
       }
     }

@@ -11,7 +11,7 @@ public class StateException extends  Exception {
 
   @Override
   public String toString() {
-    return super.toString();
+    return message;
   }
 
   @Override
