@@ -27,6 +27,18 @@ public class State {
     this.isInitial = false;
   }
 
+  /**
+   * Constructor for the unit test.
+   * @param state state
+   * @param isTerminal if its a final state
+   * @param isInitial if its a initial state
+   */
+  public State(String state, boolean isTerminal, boolean isInitial) {
+    this.state = state;
+    this.isTerminal = isTerminal;
+    this.isInitial = isInitial;
+  }
+
   public String getState() {
     return state;
   }
