@@ -46,10 +46,6 @@ public class State {
     return state;
   }
 
-  public void setState(String state) {
-    this.state = state;
-  }
-
   @Override
   public String toString() {
     return state;
