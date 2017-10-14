@@ -51,7 +51,7 @@ public class Fsm {
       System.out.println("Enter the state trasnitions (For ex, \"0S,1R,1S\" (Newline to stop): ");
       StateUtil.readTransitions(statesList, events);
 
-      StateUtil.analyze(statesList, events);
+      StateUtil.analyzeTerminalStates(statesList);
 
       StateUtil.handleTransitions(statesList, events);
 

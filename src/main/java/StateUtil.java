@@ -231,9 +231,8 @@ public class StateUtil {
    * Analyze method for reachablity.
    *
    * @param statesList list of states
-   * @param events     list of events
    */
-  public static void analyze(ArrayList<State> statesList, ArrayList<Event> events) {
+  public static List<State> analyzeTerminalStates(ArrayList<State> statesList) {
 
     ArrayList<State> terminalStates = new ArrayList<State>();
 
@@ -252,31 +251,106 @@ public class StateUtil {
       }
     }
 
-    checkReachableTerminal(transitions, terminalStates);
+    return checkReachableTerminal(transitions, terminalStates);
 
   }
 
-  private static void checkReachableTerminal(ArrayList<Transition> transitions,
-                                             ArrayList<State> terminalStates) {
+  private static List<State> checkReachableTerminal(ArrayList<Transition> transitions,
+                                                    ArrayList<State> terminalStates) {
+
+    List<State> unreachableTerminalStates = new ArrayList<State>();
 
     for (State terminalState : terminalStates) {
-      boolean result = checkReachability(transitions, terminalState);
+      boolean result = checkReachabilityTerminal(transitions, terminalState);
       if (!result) {
         System.out.println("Terminal state is not reachable: " + terminalState.getState());
+        unreachableTerminalStates.add(terminalState);
       }
 
     }
 
+    return unreachableTerminalStates;
+
   }
 
-  private static boolean checkReachability(ArrayList<Transition> transitions, State terminalState) {
+
+  /**
+   * Analyze method for reachablity.
+   *
+   * @param statesList list of states
+   */
+  public static List<State> analyzeIntermediateStates(ArrayList<State> statesList) {
+
+    ArrayList<State> intermediateStates = new ArrayList<State>();
+
+    for (State state : statesList) {
+
+      if (state.getStateType() == StateType.INTERMEDIATE) {
+        intermediateStates.add(state);
+      }
+    }
+
+    ArrayList<Transition> transitions = new ArrayList<Transition>();
+
+    for (State state : statesList) {
+      for (Event event : state.getTransitions().keySet()) {
+        transitions.add(new Transition(state, state.getTransitions().get(event), event));
+      }
+    }
+
+    return checkReachableIntermediate(transitions, intermediateStates);
+
+  }
+
+  private static List<State> checkReachableIntermediate(ArrayList<Transition> transitions,
+                                                        ArrayList<State> intermediateStates) {
+
+    List<State> unreachableintermediateStates = new ArrayList<State>();
+
+    for (State intermediateState : intermediateStates) {
+      boolean result = checkReachabilityIntermediate(transitions, intermediateState);
+      if (!result) {
+        System.out.println("Intermediate state is not reachable to terminal state: " + intermediateState.getState());
+        unreachableintermediateStates.add(intermediateState);
+      }
+
+    }
+
+    return unreachableintermediateStates;
+
+  }
+
+
+  private static boolean checkReachabilityTerminal(ArrayList<Transition> transitions,
+                                                   State terminalState) {
+
+    if (terminalState.getStateType() == StateType.INITIAL) {
+      return true;
+    }
 
     for (Transition transition : transitions) {
-      if (transition.getFinalState() == terminalState) {
-        checkReachability(transitions, transition.getInitialState());
+      if (transition.getFinalState() == terminalState &&
+              terminalState.getStateType() != StateType.INITIAL) {
+       return checkReachabilityTerminal(transitions, transition.getInitialState());
+      }
+    }
+
+    return false;
+
+  }
+
+  private static boolean checkReachabilityIntermediate(ArrayList<Transition> transitions,
+                                                       State intermediateState) {
+
+    for (Transition transition : transitions) {
+      if (transition.getFinalState() == intermediateState &&
+              intermediateState.getStateType() == StateType.TERMINAL) {
         return true;
       }
     }
+
+    //checkReachabilityIntermediate(transitions, transition.getFinalState());
+
 
     return false;
   }
