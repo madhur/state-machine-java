@@ -281,8 +281,8 @@ public class StateUtil {
     }
 
     for (Transition transition : transitions) {
-      if (transition.getFinalState() == terminalState &&
-              terminalState.getStateType() != StateType.INITIAL) {
+      if (transition.getFinalState() == terminalState
+              && terminalState.getStateType() != StateType.INITIAL) {
         return checkReachabilityTerminal(transitions, transition.getInitialState());
       }
     }
@@ -349,8 +349,8 @@ public class StateUtil {
     }
 
     for (Transition transition : transitions) {
-      if (transition.getFinalState() == intermediateState &&
-              intermediateState.getStateType() != StateType.TERMINAL) {
+      if (transition.getFinalState() == intermediateState
+              && intermediateState.getStateType() != StateType.TERMINAL) {
         return checkReachabilityTerminal(transitions, transition.getFinalState());
       }
     }
