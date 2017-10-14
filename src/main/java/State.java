@@ -18,6 +18,10 @@ public class State {
 
   private StateType stateType;
 
+  public Map<Event, State> getTransitions() {
+    return transitions;
+  }
+
   private Map<Event, State> transitions = new HashMap<Event, State>();
 
 

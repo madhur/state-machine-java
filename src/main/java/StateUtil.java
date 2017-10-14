@@ -9,8 +9,9 @@ public class StateUtil {
 
   /**
    * Marks terminal states.
+   *
    * @param statesList List of states
-   * @param textLines Input string
+   * @param textLines  Input string
    * @throws StateException stateexception
    */
   public static void markTerimalStates(ArrayList<State> statesList, ArrayList<String> textLines)
@@ -33,13 +34,14 @@ public class StateUtil {
 
   /**
    * Mark initial state.
-   * @param statesList list of states
+   *
+   * @param statesList   list of states
    * @param initialState initial state string
    * @throws StateException stateexception
    */
   public static void markInitialState(ArrayList<State> statesList, String initialState) throws
           StateException {
-    State targetState  = containsState(statesList, initialState);
+    State targetState = containsState(statesList, initialState);
 
     if (targetState == null) {
       throw new StateException("The state was not found");
@@ -50,12 +52,13 @@ public class StateUtil {
 
   /**
    * Get states list from list of strings.
+   *
    * @param stringStates list of strings
    * @return ArrayList of states
    */
   public static ArrayList<State> getStates(ArrayList<String> stringStates) {
     ArrayList<State> states = new ArrayList<State>();
-    for (String state: stringStates) {
+    for (String state : stringStates) {
       states.add(new State(state));
     }
 
@@ -65,12 +68,13 @@ public class StateUtil {
 
   /**
    * get list of events from list of strings.
+   *
    * @param stringEvents List of string events
    * @return ArrayList of events.
    */
   public static ArrayList<Event> getEvents(ArrayList<String> stringEvents) {
     ArrayList<Event> eventList = new ArrayList<Event>();
-    for (String event: stringEvents) {
+    for (String event : stringEvents) {
       eventList.add(new Event(event));
     }
 
@@ -80,7 +84,8 @@ public class StateUtil {
 
   /**
    * Checks if the list of states contains the state string.
-   * @param list list of states
+   *
+   * @param list  list of states
    * @param state single state string
    * @return State object
    * @throws StateException state exception
@@ -97,7 +102,8 @@ public class StateUtil {
 
   /**
    * Checks if the list of events contains a particular event.
-   * @param list list of events
+   *
+   * @param list  list of events
    * @param event string event
    * @return Event object
    * @throws StateException stateexception
@@ -115,6 +121,7 @@ public class StateUtil {
 
   /**
    * Reads multiple lines of text from console.
+   *
    * @return ArrayList of strings
    */
   public static ArrayList<String> readText() {
@@ -130,6 +137,7 @@ public class StateUtil {
 
   /**
    * Read single line of text from console.
+   *
    * @return String object
    */
   public static String readSingleText() {
@@ -140,8 +148,9 @@ public class StateUtil {
 
   /**
    * ReadTranstions from the consoles.
+   *
    * @param statesList list of states
-   * @param eventList list of events
+   * @param eventList  list of events
    * @throws StateException state exception.
    */
   public static void readTransitions(ArrayList<State> statesList, ArrayList<Event> eventList)
@@ -171,8 +180,9 @@ public class StateUtil {
 
   /**
    * Handles the transition loop from the console.
+   *
    * @param statesList list of states
-   * @param events list of events
+   * @param events     list of events
    * @throws StateException state exception
    */
   public static void handleTransitions(ArrayList<State> statesList, ArrayList<Event> events)
@@ -208,12 +218,66 @@ public class StateUtil {
   }
 
   private static State getInitialState(ArrayList<State> statesList) throws StateException {
-    for (State state: statesList) {
+    for (State state : statesList) {
       if (state.getStateType() == StateType.INITIAL) {
         return state;
       }
     }
 
     throw new StateException("No initial state found");
+  }
+
+  /**
+   * Analyze method for reachablity.
+   *
+   * @param statesList list of states
+   * @param events     list of events
+   */
+  public static void analyze(ArrayList<State> statesList, ArrayList<Event> events) {
+
+    ArrayList<State> terminalStates = new ArrayList<State>();
+
+    for (State state : statesList) {
+
+      if (state.getStateType() == StateType.TERMINAL) {
+        terminalStates.add(state);
+      }
+    }
+
+    ArrayList<Transition> transitions = new ArrayList<Transition>();
+
+    for (State state : statesList) {
+      for (Event event : state.getTransitions().keySet()) {
+        transitions.add(new Transition(state, state.getTransitions().get(event), event));
+      }
+    }
+
+    checkReachableTerminal(transitions, terminalStates);
+
+  }
+
+  private static void checkReachableTerminal(ArrayList<Transition> transitions,
+                                             ArrayList<State> terminalStates) {
+
+    for (State terminalState : terminalStates) {
+      boolean result = checkReachability(transitions, terminalState);
+      if (!result) {
+        System.out.println("Terminal state is not reachable: " + terminalState.getState());
+      }
+
+    }
+
+  }
+
+  private static boolean checkReachability(ArrayList<Transition> transitions, State terminalState) {
+
+    for (Transition transition : transitions) {
+      if (transition.getFinalState() == terminalState) {
+        checkReachability(transitions, transition.getInitialState());
+        return true;
+      }
+    }
+
+    return false;
   }
 }
