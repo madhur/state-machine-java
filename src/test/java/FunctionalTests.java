@@ -66,7 +66,7 @@ public class FunctionalTests {
     thirdState.addTransition(firstEvent, fourthState);
     fourthState.addTransition(buyEvent, completedState);
 
-    phantomState.addTransition(phantomEvent, cancelState);
+   // phantomState.addTransition(phantomEvent, cancelState);
 
   //  fourthState.addTransition(cancelEvent, cancelState);
 
@@ -113,7 +113,8 @@ public class FunctionalTests {
   @Test()
   public void reachablityIntermediate() {
     List<State> unreachableStates = StateUtil.analyzeIntermediateStates(states);
-
+    Assert.assertEquals(unreachableStates.size(), 1);
+    Assert.assertEquals(unreachableStates.get(0), phantomState);
   }
 
 
